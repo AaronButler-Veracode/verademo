@@ -1,0 +1,92 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow will initiate a Veracode Static Analysis Pipeline scan, return a results.json and convert to SARIF for upload as a code scanning alert
+
+name: Veracode Static Analysis Sandbox Scan
+
+on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     # The branches below must be a subset of the branches above
+#     branches: [ "main" ]
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+# Run daily at 6pm EST  
+  schedule:
+    - cron: '00 18 * * *'
+
+jobs:
+  # This workflow contains a job to build and submit pipeline scan, you will need to customize the build process accordingly and make sure the artifact you build is used as the file input to the pipeline scan file parameter
+  build-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it and copies all sources into ZIP file for submitting for analysis. Replace this section with your applications build steps
+    - uses: actions/checkout@v3
+      with:
+        repository: ''
+    - uses: actions/setup-java@v3
+      with:
+        java-version: 8
+        distribution: 'temurin'
+    - name: Build with Maven
+      run: mvn -B package --file app/pom.xml
+    - name: Veracode Sandbox Upload And Scan
+      # You may pin to the exact commit or the version.
+      # uses: veracode/veracode-uploadandscan-action@98e2a2941b985e55bfe469ebcb970b2e686625e4
+      uses: veracode/veracode-uploadandscan-action@0.2.6
+      with:
+        # appname
+        appname: Verademo
+        # createprofile
+#         createprofile: # default is true
+        # filepath
+        filepath: app/target/verademo.war
+        # version
+#         version: # default is Scan from Github job: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+        # vid
+        vid: "${{secrets.VERACODE_API_ID}}"
+        # vkey
+        vkey: "${{secrets.VERACODE_API_KEY}}"
+        # true or false
+        createsandbox: true
+        # name of the sandbox
+        sandboxname: GitHub
+        # wait X minutes for the scan to complete
+#         scantimeout: # optional
+        # modules to exclude from module selection
+#         exclude: # optional
+        # modules to include in module selection
+#         include: # optional
+        # business criticality - policy selection
+#         criticality: # optional
+        # filename pattern
+#         pattern: # optional
+        # replacement
+#         replacement: # optional
+        # specify to scan in a sandbox
+#         sandboxid: # optional
+        # All top level modules
+#         scanallnonfataltoplevelmodules: # optional
+        # platform selected modules
+#         selected: # optional
+        # selected modules like from previous scan
+#         selectedpreviously: # optional
+        # teams
+#         teams: # optional
+        # teams
+#         toplevel: # optional
+        # automatically delete the current scan if there are any errors when uploading files or starting the scan
+#         deleteincompletescan: # optional
+        # Interval, in seconds, to poll for the status of a running scan. Value range is 30 to 120 (two minutes). Default is 120.
+#         scanpollinginterval: # optional
+        # specify version of the Java API Wrapper; default is latest
+#         javawrapperversion: # optional
+        # show detailed diagnostic information, which you can use for debugging, in the output.
+#         debug: # optional
+        # automatically select all new top-level modules for inclusion in the scan
+#         includenewmodules: # optional
