@@ -92,8 +92,7 @@ jobs:
 #         create_baseline_from: # optional
         # Fail the build upon findings. Takes true or false
 #         fail_build: # optional
-    - name: Dirctory Listing
-      run: ll
+
 # This step will import the flaws from the step above
   import-issues:
     needs: build-and-scan
