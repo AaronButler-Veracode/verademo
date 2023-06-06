@@ -101,8 +101,9 @@ jobs:
       - name: get scan results
         uses: actions/download-artifact@v3
         with:
-          name: filtered-results.json
-
+          name: Veracode Pipeline-Scan Results
+      - name: Dir listing
+        run: ls -l
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
