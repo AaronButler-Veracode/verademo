@@ -102,9 +102,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Veracode Pipeline-Scan Results
-      - name: Dir listing
-        run: ls -l
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: 'filtered_results.json'
+          github-token: ${{ github.token }}
