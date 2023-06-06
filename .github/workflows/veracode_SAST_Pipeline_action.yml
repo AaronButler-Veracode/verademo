@@ -95,6 +95,9 @@ jobs:
 
 # This step will import the flaws from the step above
   import-issues:
+    #needed to create labels and issues.
+    permissions:
+      issues: write
     needs: build-and-scan
     runs-on: ubuntu-latest
     steps:
@@ -106,4 +109,3 @@ jobs:
         uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: 'filtered_results.json'
-          github-token: ${{ github.token }}
