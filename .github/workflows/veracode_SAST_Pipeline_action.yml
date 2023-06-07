@@ -93,19 +93,19 @@ jobs:
         # Fail the build upon findings. Takes true or false
 #         fail_build: # optional
 
-# This step will import the flaws from the step above
-  import-issues:
-    #needed to create labels and issues.
-    permissions:
-      issues: write
-    needs: build-and-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: get scan results
-        uses: actions/download-artifact@v3
-        with:
-          name: Veracode Pipeline-Scan Results
-      - name: import flaws as issues
-        uses: veracode/veracode-flaws-to-issues@v2.1.10
-        with:
-          scan-results-json: 'filtered_results.json'
+# This step will import the flaws from the step above as GitHub issues
+#   import-issues:
+#     #needed to create labels and issues.
+#     permissions:
+#       issues: write
+#     needs: build-and-scan
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: get scan results
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: Veracode Pipeline-Scan Results
+#       - name: import flaws as issues
+#         uses: veracode/veracode-flaws-to-issues@v2.1.10
+#         with:
+#           scan-results-json: 'filtered_results.json'
